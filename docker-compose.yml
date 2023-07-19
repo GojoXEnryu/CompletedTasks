@@ -1,0 +1,88 @@
+version: '3.9'
+
+services:
+  user_project:
+    build: 
+      context: UserProject/
+      dockerfile: Dockerfile
+    ports:
+      - "5555:80"
+    links:
+      - user_db
+    depends_on:
+      - user_db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - CONNECTION_STRING=Host=user_db;Username=postgres;Password=password;Database=userDatabase;
+      
+  cart_project:
+    build: 
+      context: CartProject/
+      dockerfile: Dockerfile
+    ports:
+      - "5556:80"
+    links:
+      - cart_db
+    depends_on:
+      - cart_db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - CONNECTION_STRING=Host=cart_db;Username=postgres;Password=password;Database=cartDatabase;
+      
+  product_project:
+    build: 
+      context: ProductProject/
+      dockerfile: Dockerfile
+    ports:
+      - "5557:80"
+    links:
+      - product_db
+    depends_on:
+      - product_db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - CONNECTION_STRING=Host=product_db;Username=postgres;Password=password;Database=productDatabase;
+
+  user_db:
+    image: postgres:14-alpine
+    ports:
+      - "5431:5432"
+    environment:
+      - POSTGRES_DB=userDatabase
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - user-db-volume:/var/lib/postgresql/data
+      
+  cart_db:
+    image: postgres:14-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=cartDatabase
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - cart-db-volume:/var/lib/postgresql/data
+      
+  product_db:
+    image: postgres:14-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=productDatabase
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - product-db-volume:/var/lib/postgresql/data
+
+volumes:
+  user-db-volume:
+    driver: local  
+  cart-db-volume:
+    driver: local  
+  product-db-volume:
+    driver: local  

@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option csharp_namespace = "CartClientApp";
+
+package cartPackage;
+
+message ProductIdRequest
+{
+	int64 productId = 1;
+}
+
+message ProductIdReply
+{
+	int64 productId = 1;
+}
+
+service CartService
+{
+	rpc AddToCart (ProductIdRequest) returns (ProductIdReply);
+}
