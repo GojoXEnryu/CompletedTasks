@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option csharp_namespace = "CartClientApp";
+
+package cartPackage;
+
+message IdRequest
+{
+	int64 Id = 1;
+
+}
+message IdRequestProducts
+{
+	repeated int64 Ids = 1;
+	repeated int32 Counts = 2;
+}
+
+message IdReply
+{
+	int64 Id = 1;
+}
+
+message IdReplyProducts
+{
+	repeated int64 Ids = 1;
+	repeated int32 Counts = 2;
+}
+
+service CartCheck
+{
+	rpc DoesExist (IdRequest) returns (IdReply);
+	rpc DoesExistMultiple (IdRequestProducts) returns (IdReplyProducts);
+}
